@@ -1,100 +1,25 @@
 "use client";
 
-import { useState } from "react";
-import toast from "react-hot-toast";
+import { useEffect, useState } from "react";
 import CreateItemModal, {
   ItemSubmissionData,
 } from "./components/CreateItemModal";
 import ItemCard from "./components/ItemCard";
-import { Item } from "@/app/types/items";
-
-const mockItems: Item[] = [
-  {
-    id: "1",
-    type: "FOOD",
-    name: "Classic Cheeseburger",
-    description: "Double patty, american cheese, pickles, and house sauce.",
-    basePrice: 1299,
-    categoryId: "burgers",
-    isAvailable: true,
-    ingredients: [
-      "Beef Patty",
-      "American Cheese",
-      "Pickles",
-      "Bun",
-      "House Sauce",
-    ],
-    nutrition: { calories: 850, protein: 45, carbs: 50, fat: 40 },
-    options: [],
-  },
-  {
-    id: "2",
-    type: "PRODUCT",
-    name: "Brand Hoodie",
-    description: "Black oversized hoodie with purple logo print.",
-    basePrice: 4500,
-    categoryId: "merch",
-    isAvailable: true,
-    stock: 24,
-    sku: "HOOD-BLK-L",
-    variants: [],
-  },
-  {
-    id: "3",
-    type: "FOOD",
-    name: "Truffle Fries",
-    description: "Crispy fries tossed in truffle oil and parmesan.",
-    basePrice: 650,
-    categoryId: "sides",
-    isAvailable: true,
-    ingredients: ["Potatoes", "Truffle Oil", "Parmesan Cheese", "Parsley"],
-    nutrition: { calories: 420, protein: 8, carbs: 65, fat: 22 },
-    options: [],
-  },
-];
+import { useItemStore } from "@/app/store/useItemStore";
 
 export default function ItemsPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [items, setItems] = useState<Item[]>(mockItems);
+  const { items, isLoading, fetchItems, addItem } = useItemStore();
 
-  const handleCreate = (data: ItemSubmissionData) => {
-    const baseItem = {
-      id: crypto.randomUUID(),
-      name: data.name,
-      description: data.description,
-      categoryId: data.category,
-      image: data.image || undefined,
-      basePrice: parseFloat(data.price) * 100,
-      isAvailable: true,
-    };
+  useEffect(() => {
+    fetchItems();
+  }, [fetchItems]);
 
-    let newItem: Item;
-
-    if (data.type === "FOOD") {
-      newItem = {
-        ...baseItem,
-        type: "FOOD",
-        ingredients: data.ingredients,
-        options: data.options,
-        nutrition: {
-          calories: parseInt(data.nutrition?.calories || "0"),
-          protein: parseInt(data.nutrition?.protein || "0"),
-          carbs: parseInt(data.nutrition?.carbs || "0"),
-          fat: parseInt(data.nutrition?.fat || "0"),
-        },
-      };
-    } else {
-      newItem = {
-        ...baseItem,
-        type: "PRODUCT",
-        stock: parseInt(data.stock) || 0,
-        sku: data.sku,
-        variants: data.variants,
-      };
+  const handleCreate = async (data: ItemSubmissionData) => {
+    const success = await addItem(data);
+    if (success) {
+      setIsModalOpen(false);
     }
-
-    setItems([...items, newItem]);
-    toast.success("Item created successfully 💜");
   };
 
   return (
@@ -110,7 +35,8 @@ export default function ItemsPage() {
         </div>
         <button
           onClick={() => setIsModalOpen(true)}
-          className="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white rounded-xl text-sm font-medium transition-colors shadow-[0_0_15px_-3px_rgba(147,51,234,0.5)] flex items-center gap-2"
+          disabled={isLoading}
+          className="px-4 py-2 bg-purple-600 hover:bg-purple-500 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-xl text-sm font-medium transition-colors shadow-[0_0_15px_-3px_rgba(147,51,234,0.5)] flex items-center gap-2"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -126,15 +52,22 @@ export default function ItemsPage() {
               d="M12 4.5v15m7.5-7.5h-15"
             />
           </svg>
-          Create Item
+          {isLoading ? "Processing..." : "Create Item"}
         </button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {items.map((item) => (
-          <ItemCard key={item.id} item={item} />
-        ))}
-      </div>
+      {isLoading && items.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-20 text-zinc-500">
+          <div className="w-8 h-8 border-2 border-purple-600 border-t-transparent rounded-full animate-spin mb-4" />
+          <p>Loading your inventory...</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {items.map((item) => (
+            <ItemCard key={item.id} item={item} />
+          ))}
+        </div>
+      )}
 
       <CreateItemModal
         isOpen={isModalOpen}

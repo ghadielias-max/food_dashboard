@@ -1,237 +1,9 @@
 "use client";
 
-import { Item } from "@/app/types/items";
-import { Order } from "@/app/types/order";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import OrderCard from "./components/OrderCard";
 import OrdersTable from "./components/OrdersTable";
-
-const mockLiveOrders: Order[] = [
-  {
-    id: "ord_1",
-    businessId: "biz_1",
-    customerName: "Table 4",
-    status: "PENDING",
-    totalPrice: 4500,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    items: [
-      {
-        itemId: "item_1",
-        name: "Spicy Ramen",
-        quantity: 2,
-        priceAtOrder: 1500,
-        itemDetails: {
-          id: "item_1",
-          name: "Spicy Ramen",
-          type: "FOOD",
-          basePrice: 1500,
-          description: "Mock Description",
-          categoryId: "mains",
-          isAvailable: true,
-          ingredients: ["Noodles", "Broth"],
-        } as Item,
-      },
-      {
-        itemId: "item_2",
-        name: "Gyoza",
-        quantity: 1,
-        priceAtOrder: 1500,
-        itemDetails: {
-          id: "item_2",
-          name: "Gyoza",
-          type: "FOOD",
-          basePrice: 1500,
-          description: "Mock Description",
-          categoryId: "sides",
-          isAvailable: true,
-          ingredients: ["Pork", "Dough"],
-        } as Item,
-      },
-    ],
-  },
-  {
-    id: "ord_2",
-    businessId: "biz_1",
-    customerName: "John Doe (Pickup)",
-    status: "READY",
-    totalPrice: 1200,
-    createdAt: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
-    updatedAt: new Date().toISOString(),
-    items: [
-      {
-        itemId: "item_3",
-        name: "Matcha Latte",
-        quantity: 2,
-        priceAtOrder: 600,
-        itemDetails: {
-          id: "item_3",
-          name: "Matcha Latte",
-          type: "FOOD",
-          basePrice: 600,
-          description: "Mock Description",
-          categoryId: "drinks",
-          isAvailable: true,
-          ingredients: ["Matcha", "Milk"],
-        } as Item,
-      },
-    ],
-  },
-  {
-    id: "ord_3",
-    businessId: "biz_1",
-    customerName: "Table 2",
-    status: "PREPARING",
-    totalPrice: 8500,
-    createdAt: new Date(Date.now() - 1000 * 60 * 15).toISOString(),
-    updatedAt: new Date().toISOString(),
-    items: [
-      {
-        itemId: "item_4",
-        name: "Sushi Platter",
-        quantity: 1,
-        priceAtOrder: 8500,
-        itemDetails: {
-          id: "item_4",
-          name: "Sushi Platter",
-          type: "FOOD",
-          basePrice: 8500,
-          description: "Mock Description",
-          categoryId: "mains",
-          isAvailable: true,
-          ingredients: ["Rice", "Fish"],
-        } as Item,
-      },
-    ],
-  },
-  {
-    id: "ord_4",
-    businessId: "biz_1",
-    customerName: "Table 7",
-    status: "PENDING",
-    totalPrice: 3200,
-    createdAt: new Date(Date.now() - 1000 * 60 * 5).toISOString(),
-    updatedAt: new Date().toISOString(),
-    items: [
-      {
-        itemId: "item_5",
-        name: "Edamame",
-        quantity: 1,
-        priceAtOrder: 500,
-        itemDetails: {
-          id: "item_5",
-          name: "Edamame",
-          type: "FOOD",
-          basePrice: 500,
-          description: "Mock Description",
-          categoryId: "sides",
-          isAvailable: true,
-          ingredients: ["Edamame", "Salt"],
-        } as Item,
-      },
-      {
-        itemId: "item_6",
-        name: "Salmon Roll",
-        quantity: 2,
-        priceAtOrder: 1350,
-        itemDetails: {
-          id: "item_6",
-          name: "Salmon Roll",
-          type: "FOOD",
-          basePrice: 1350,
-          description: "Mock Description",
-          categoryId: "mains",
-          isAvailable: true,
-          ingredients: ["Rice", "Salmon", "Seaweed"],
-        } as Item,
-      },
-    ],
-  },
-];
-
-const mockHistoryOrders: Order[] = [
-  {
-    id: "ord_98",
-    businessId: "biz_1",
-    customerName: "Table 12",
-    status: "COMPLETED",
-    totalPrice: 12500,
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(),
-    updatedAt: new Date().toISOString(),
-    items: [
-      {
-        itemId: "item_5",
-        name: "Omakase Set",
-        quantity: 1,
-        priceAtOrder: 12500,
-        itemDetails: {
-          id: "item_5",
-          name: "Omakase Set",
-          type: "FOOD",
-          basePrice: 12500,
-          description: "Mock Description",
-          categoryId: "mains",
-          isAvailable: true,
-          ingredients: ["Chef's Choice"],
-        } as Item,
-      },
-    ],
-  },
-  {
-    id: "ord_99",
-    businessId: "biz_1",
-    customerName: "Sarah Smith",
-    status: "CANCELLED",
-    totalPrice: 3200,
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 5).toISOString(),
-    updatedAt: new Date().toISOString(),
-    items: [
-      {
-        itemId: "item_6",
-        name: "Tempura Udon",
-        quantity: 2,
-        priceAtOrder: 1600,
-        itemDetails: {
-          id: "item_6",
-          name: "Tempura Udon",
-          type: "FOOD",
-          basePrice: 1600,
-          description: "Mock Description",
-          categoryId: "mains",
-          isAvailable: true,
-          ingredients: ["Udon", "Tempura Shrimp"],
-        } as Item,
-      },
-    ],
-  },
-  {
-    id: "ord_100",
-    businessId: "biz_1",
-    customerName: "Table 5",
-    status: "COMPLETED",
-    totalPrice: 4500,
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(),
-    updatedAt: new Date().toISOString(),
-    items: [
-      {
-        itemId: "item_1",
-        name: "Spicy Ramen",
-        quantity: 3,
-        priceAtOrder: 1500,
-        itemDetails: {
-          id: "item_1",
-          name: "Spicy Ramen",
-          type: "FOOD",
-          basePrice: 1500,
-          description: "Mock Description",
-          categoryId: "mains",
-          isAvailable: true,
-          ingredients: ["Noodles", "Spicy Broth"],
-        } as Item,
-      },
-    ],
-  },
-];
+import { useOrderStore } from "@/app/store/useOrderStore";
 
 export default function OrdersPage() {
   const [activeTab, setActiveTab] = useState<"live" | "history">("live");
@@ -239,7 +11,24 @@ export default function OrdersPage() {
     "ALL" | "PENDING" | "PREPARING" | "READY"
   >("ALL");
 
-  const filteredLiveOrders = mockLiveOrders.filter((order) => {
+  const { orders, isLoading, fetchOrders } = useOrderStore();
+
+  useEffect(() => {
+    fetchOrders();
+  }, [fetchOrders]);
+
+  const liveOrders = orders.filter(
+    (o) =>
+      o.status === "PENDING" ||
+      o.status === "PREPARING" ||
+      o.status === "READY",
+  );
+
+  const historyOrders = orders.filter(
+    (o) => o.status === "COMPLETED" || o.status === "CANCELLED",
+  );
+
+  const filteredLiveOrders = liveOrders.filter((order) => {
     if (activeSubTab === "ALL") return true;
     return order.status === activeSubTab;
   });
@@ -318,7 +107,12 @@ export default function OrdersPage() {
       </div>
 
       <div className="min-h-[500px]">
-        {activeTab === "live" ? (
+        {isLoading && orders.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-20 text-zinc-500">
+            <div className="w-8 h-8 border-2 border-purple-600 border-t-transparent rounded-full animate-spin mb-4" />
+            <p>Loading orders...</p>
+          </div>
+        ) : activeTab === "live" ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredLiveOrders.map((order) => (
               <OrderCard key={order.id} order={order} />
@@ -330,7 +124,7 @@ export default function OrdersPage() {
             )}
           </div>
         ) : (
-          <OrdersTable orders={mockHistoryOrders} />
+          <OrdersTable orders={historyOrders} />
         )}
       </div>
     </div>
