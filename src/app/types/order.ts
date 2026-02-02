@@ -1,5 +1,3 @@
-// types/order.ts
-
 import { Item } from "./items";
 
 export type OrderStatus =
@@ -20,10 +18,13 @@ export interface OrderItem {
 export interface Order {
   id: string;
   businessId: string;
-  customerName: string;
-  tableId?: string;
-  status: OrderStatus;
 
+  customerName: string;
+  customerPhone?: string;
+  customerAddress?: string;
+  tableId?: string;
+
+  status: OrderStatus;
   totalPrice: number;
   items: OrderItem[];
 

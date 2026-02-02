@@ -1,4 +1,4 @@
-import { Order } from "@/app/types/order";
+import { Order, OrderStatus } from "@/app/types/order";
 import { Item } from "../types/items";
 
 const MOCK_ORDERS: Order[] = [
@@ -6,6 +6,7 @@ const MOCK_ORDERS: Order[] = [
     id: "ord_1",
     businessId: "biz_1",
     customerName: "Table 4",
+    tableId: "4",
     status: "PENDING",
     totalPrice: 4500,
     createdAt: new Date().toISOString(),
@@ -48,7 +49,9 @@ const MOCK_ORDERS: Order[] = [
   {
     id: "ord_2",
     businessId: "biz_1",
-    customerName: "John Doe (Pickup)",
+    customerName: "John Doe",
+    customerPhone: "+1 (555) 019-2834",
+    customerAddress: " abou 3azra, Beirut, Lebanon",
     status: "READY",
     totalPrice: 1200,
     createdAt: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
@@ -76,6 +79,7 @@ const MOCK_ORDERS: Order[] = [
     id: "ord_3",
     businessId: "biz_1",
     customerName: "Table 2",
+    tableId: "2",
     status: "PREPARING",
     totalPrice: 8500,
     createdAt: new Date(Date.now() - 1000 * 60 * 15).toISOString(),
@@ -103,6 +107,7 @@ const MOCK_ORDERS: Order[] = [
     id: "ord_4",
     businessId: "biz_1",
     customerName: "Table 7",
+    tableId: "7",
     status: "PENDING",
     totalPrice: 3200,
     createdAt: new Date(Date.now() - 1000 * 60 * 5).toISOString(),
@@ -143,36 +148,11 @@ const MOCK_ORDERS: Order[] = [
     ],
   },
   {
-    id: "ord_98",
-    businessId: "biz_1",
-    customerName: "Table 12",
-    status: "COMPLETED",
-    totalPrice: 12500,
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(),
-    updatedAt: new Date().toISOString(),
-    items: [
-      {
-        itemId: "item_5",
-        name: "Omakase Set",
-        quantity: 1,
-        priceAtOrder: 12500,
-        itemDetails: {
-          id: "item_5",
-          name: "Omakase Set",
-          type: "FOOD",
-          basePrice: 12500,
-          description: "Mock Description",
-          categoryId: "mains",
-          isAvailable: true,
-          ingredients: ["Chef's Choice"],
-        } as Item,
-      },
-    ],
-  },
-  {
     id: "ord_99",
     businessId: "biz_1",
     customerName: "Sarah Smith",
+    customerPhone: "+1 (555) 999-8888",
+    customerAddress: "123 Maple Street, Apt 4B, New York, NY",
     status: "CANCELLED",
     totalPrice: 3200,
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 5).toISOString(),
@@ -196,38 +176,20 @@ const MOCK_ORDERS: Order[] = [
       },
     ],
   },
-  {
-    id: "ord_100",
-    businessId: "biz_1",
-    customerName: "Table 5",
-    status: "COMPLETED",
-    totalPrice: 4500,
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(),
-    updatedAt: new Date().toISOString(),
-    items: [
-      {
-        itemId: "item_1",
-        name: "Spicy Ramen",
-        quantity: 3,
-        priceAtOrder: 1500,
-        itemDetails: {
-          id: "item_1",
-          name: "Spicy Ramen",
-          type: "FOOD",
-          basePrice: 1500,
-          description: "Mock Description",
-          categoryId: "mains",
-          isAvailable: true,
-          ingredients: ["Noodles", "Spicy Broth"],
-        } as Item,
-      },
-    ],
-  },
 ];
 
 export const OrderService = {
   getAll: async (): Promise<Order[]> => {
     await new Promise((resolve) => setTimeout(resolve, 500));
     return [...MOCK_ORDERS];
+  },
+  updateStatus: async (orderId: string, status: OrderStatus): Promise<void> => {
+    await new Promise((resolve) => setTimeout(resolve, 300));
+
+    const index = MOCK_ORDERS.findIndex((o) => o.id === orderId);
+    if (index !== -1) {
+      MOCK_ORDERS[index].status = status;
+      MOCK_ORDERS[index].updatedAt = new Date().toISOString();
+    }
   },
 };

@@ -3,32 +3,57 @@
 import { useEffect, useState } from "react";
 import OrderCard from "./components/OrderCard";
 import OrdersTable from "./components/OrdersTable";
+import OrderDetailsModal from "./components/OrderDetailsModal";
 import { useOrderStore } from "@/app/store/useOrderStore";
+import { Order } from "@/app/types/order";
 
 export default function OrdersPage() {
   const [activeTab, setActiveTab] = useState<"live" | "history">("live");
+
+  const [orderType, setOrderType] = useState<"ALL" | "DINE_IN" | "DELIVERY">(
+    "ALL",
+  );
+
   const [activeSubTab, setActiveSubTab] = useState<
     "ALL" | "PENDING" | "PREPARING" | "READY"
   >("ALL");
 
+  const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const { orders, isLoading, fetchOrders } = useOrderStore();
+
+  const selectedOrder = orders.find((o) => o.id === selectedOrderId) || null;
 
   useEffect(() => {
     fetchOrders();
   }, [fetchOrders]);
 
-  const liveOrders = orders.filter(
-    (o) =>
-      o.status === "PENDING" ||
-      o.status === "PREPARING" ||
-      o.status === "READY",
-  );
+  const handleViewDetails = (order: Order) => {
+    setSelectedOrderId(order.id);
+    setIsModalOpen(true);
+  };
 
-  const historyOrders = orders.filter(
-    (o) => o.status === "COMPLETED" || o.status === "CANCELLED",
-  );
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setTimeout(() => setSelectedOrderId(null), 300);
+  };
 
-  const filteredLiveOrders = liveOrders.filter((order) => {
+  const step1Orders = orders.filter((o) => {
+    if (activeTab === "live") {
+      return ["PENDING", "PREPARING", "READY"].includes(o.status);
+    }
+    return ["COMPLETED", "CANCELLED"].includes(o.status);
+  });
+
+  const step2Orders = step1Orders.filter((o) => {
+    if (orderType === "ALL") return true;
+    if (orderType === "DINE_IN") return !!o.tableId; // Has Table ID
+    if (orderType === "DELIVERY") return !o.tableId; // No Table ID (Delivery/Pickup)
+    return true;
+  });
+
+  const finalOrders = step2Orders.filter((order) => {
     if (activeSubTab === "ALL") return true;
     return order.status === activeSubTab;
   });
@@ -64,7 +89,8 @@ export default function OrdersPage() {
           </button>
         </div>
 
-        <div className="flex items-center justify-between border-b border-primary-dark/20">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-primary-dark/20 pb-1">
+          {/* Live / History Tabs */}
           <div className="flex items-center gap-6">
             {(["live", "history"] as const).map((tab) => (
               <button
@@ -83,22 +109,42 @@ export default function OrdersPage() {
               </button>
             ))}
           </div>
+
+          <div className="flex bg-surface-highlight p-1 rounded-lg self-start md:self-auto mb-2 md:mb-0">
+            {(["ALL", "DINE_IN", "DELIVERY"] as const).map((type) => (
+              <button
+                key={type}
+                onClick={() => setOrderType(type)}
+                className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
+                  orderType === type
+                    ? "bg-primary text-white shadow-sm"
+                    : "text-muted hover:text-white"
+                }`}
+              >
+                {type === "ALL"
+                  ? "All"
+                  : type === "DINE_IN"
+                    ? "🍽️ Dine-in"
+                    : "🛵 Delivery"}
+              </button>
+            ))}
+          </div>
         </div>
 
         {activeTab === "live" && (
-          <div className="flex gap-2">
+          <div className="flex gap-2 overflow-x-auto pb-2">
             {(["ALL", "PENDING", "PREPARING", "READY"] as const).map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveSubTab(tab)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all border ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all border whitespace-nowrap ${
                   activeSubTab === tab
                     ? "bg-primary/20 text-primary border-primary/50"
                     : "bg-surface text-muted border-transparent hover:border-primary/20 hover:text-zinc-300"
                 }`}
               >
                 {tab === "ALL"
-                  ? "All Orders"
+                  ? "All Statuses"
                   : tab.charAt(0) + tab.slice(1).toLowerCase()}
               </button>
             ))}
@@ -114,19 +160,29 @@ export default function OrdersPage() {
           </div>
         ) : activeTab === "live" ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredLiveOrders.map((order) => (
-              <OrderCard key={order.id} order={order} />
+            {finalOrders.map((order) => (
+              <OrderCard
+                key={order.id}
+                order={order}
+                onViewDetails={handleViewDetails}
+              />
             ))}
-            {filteredLiveOrders.length === 0 && (
+            {finalOrders.length === 0 && (
               <div className="col-span-full flex flex-col items-center justify-center py-20 text-muted border border-dashed border-primary-dark/20 rounded-2xl">
                 <p>No orders found in this category.</p>
               </div>
             )}
           </div>
         ) : (
-          <OrdersTable orders={historyOrders} />
+          <OrdersTable orders={finalOrders} />
         )}
       </div>
+
+      <OrderDetailsModal
+        order={selectedOrder}
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+      />
     </div>
   );
 }

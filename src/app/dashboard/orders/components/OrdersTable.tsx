@@ -23,7 +23,7 @@ export default function OrdersTable({ orders }: OrdersTableProps) {
                 Order ID
               </th>
               <th className="px-6 py-4 font-semibold text-zinc-300">
-                Customer
+                Customer & Type
               </th>
               <th className="px-6 py-4 font-semibold text-zinc-300">
                 Date & Time
@@ -37,50 +37,76 @@ export default function OrdersTable({ orders }: OrdersTableProps) {
             </tr>
           </thead>
           <tbody className="divide-y divide-primary-dark/10">
-            {orders.map((order) => (
-              <tr
-                key={order.id}
-                className="hover:bg-white/5 transition-colors group"
-              >
-                <td className="px-6 py-4 font-medium text-zinc-300">
-                  #{order.id}
-                </td>
-                <td className="px-6 py-4 text-muted">{order.customerName}</td>
-                <td className="px-6 py-4 text-muted">
-                  {new Date(order.createdAt).toLocaleDateString()}
-                  <span className="text-zinc-600 ml-2">
-                    {new Date(order.createdAt).toLocaleTimeString([], {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </span>
-                </td>
-                <td className="px-6 py-4 text-muted">
-                  <div className="flex flex-col">
-                    {order.items.map((item, i) => (
-                      <span key={i} className="text-xs">
-                        {item.quantity}x {item.name}
+            {orders.map((order) => {
+              const isDineIn = !!order.tableId;
+              return (
+                <tr
+                  key={order.id}
+                  className="hover:bg-white/5 transition-colors group"
+                >
+                  <td className="px-6 py-4 font-medium text-zinc-300">
+                    #{order.id}
+                  </td>
+                  <td className="px-6 py-4">
+                    <div className="flex flex-col">
+                      <span className="text-white font-medium">
+                        {order.customerName}
                       </span>
-                    ))}
-                  </div>
-                </td>
-                <td className="px-6 py-4 font-semibold text-white">
-                  ${(order.totalPrice / 100).toFixed(2)}
-                </td>
-                <td className="px-6 py-4">
-                  <span
-                    className={`px-2.5 py-0.5 rounded-full text-xs font-medium border ${statusColors[order.status]}`}
-                  >
-                    {order.status}
-                  </span>
-                </td>
-                <td className="px-6 py-4 text-right">
-                  <button className="text-muted hover:text-purple-400 transition-colors">
-                    View
-                  </button>
-                </td>
-              </tr>
-            ))}
+                      {isDineIn ? (
+                        <span className="text-xs text-purple-400">
+                          🍽️ Table {order.tableId}
+                        </span>
+                      ) : (
+                        <span
+                          className="text-xs text-blue-400 truncate max-w-[200px]"
+                          title={order.customerAddress}
+                        >
+                          📍 {order.customerAddress || "Takeout"}
+                        </span>
+                      )}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 text-muted">
+                    {new Date(order.createdAt).toLocaleDateString()}
+                    <span className="text-zinc-600 ml-2">
+                      {new Date(order.createdAt).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 text-muted">
+                    <div className="flex flex-col">
+                      {order.items.slice(0, 2).map((item, i) => (
+                        <span key={i} className="text-xs">
+                          {item.quantity}x {item.name}
+                        </span>
+                      ))}
+                      {order.items.length > 2 && (
+                        <span className="text-[10px] italic">
+                          +{order.items.length - 2} more
+                        </span>
+                      )}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 font-semibold text-white">
+                    ${(order.totalPrice / 100).toFixed(2)}
+                  </td>
+                  <td className="px-6 py-4">
+                    <span
+                      className={`px-2.5 py-0.5 rounded-full text-xs font-medium border ${statusColors[order.status]}`}
+                    >
+                      {order.status}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 text-right">
+                    <button className="text-muted hover:text-purple-400 transition-colors">
+                      View
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
