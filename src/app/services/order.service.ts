@@ -2,8 +2,8 @@ import { Order, OrderStatus } from "@/app/types/order";
 import { Item } from "../types/items";
 
 const BIZ_INFO = {
-  businessName: "Urban Bites Kitchen",
-  businessAddress: "123 Bliss Street, Hamra, Beirut",
+  businessName: "Shawarma ELIAS",
+  businessAddress: "SheikhTaba, Akkar, Lebanon",
   businessPhone: "+961 01 555 999",
 };
 
