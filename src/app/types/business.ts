@@ -13,5 +13,8 @@ export interface Business {
   ownerId: string;
   name: string;
   type: BusinessType;
+  address: string;
+  phone: string;
+  logoUrl?: string;
   categories: Category[];
 }

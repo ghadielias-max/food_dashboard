@@ -14,7 +14,6 @@
 }
 
 :root {
-  /* Default: Royal Purple (Dark) */
   --background: #05050a;
   --surface: #0a0a12;
   --surface-highlight: #0f0f1a;
@@ -28,7 +27,6 @@
 }
 
 [data-theme="midnight"] {
-  /* Ocean Blue (Dark) */
   --background: #020617;
   --surface: #0f172a;
   --surface-highlight: #1e293b;
@@ -37,7 +35,6 @@
 }
 
 [data-theme="forest"] {
-  /* Emerald Green (Dark) */
   --background: #020402;
   --surface: #051910;
   --surface-highlight: #064e3b;
@@ -46,7 +43,6 @@
 }
 
 [data-theme="sunset"] {
-  /* Burnt Orange (Dark) */
   --background: #0c0402;
   --surface: #1a0805;
   --surface-highlight: #2f100b;
@@ -55,21 +51,28 @@
 }
 
 [data-theme="light"] {
-  /* Clean White (Light) */
   --background: #ffffff;
   --surface: #f4f4f5;
   --surface-highlight: #e4e4e7;
   --primary: #7c3aed;
   --primary-dark: #5b21b6;
   --text-muted: #71717a;
-  /* Override text colors for light mode visibility */
   color: #09090b;
 }
-/* Fix white text in light mode */
+
 [data-theme="light"] .text-white {
   color: #18181b !important;
 }
 [data-theme="light"] .text-zinc-200,
 [data-theme="light"] .text-zinc-300 {
   color: #3f3f46 !important;
+}
+
+*,
+*::before,
+*::after {
+  transition-property:
+    background-color, border-color, color, fill, stroke, box-shadow;
+  transition-duration: 300ms;
+  transition-timing-function: ease-in-out;
 }
