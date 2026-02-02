@@ -16,7 +16,7 @@ export default function SettingsPage() {
           Settings
         </h2>
         <p className="text-muted mt-1">
-          Customize your dashboard appearance and business detailss
+          Customize your dashboard appearance and business details
         </p>
       </div>
 
