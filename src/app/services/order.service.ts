@@ -1,13 +1,22 @@
 import { Order, OrderStatus } from "@/app/types/order";
 import { Item } from "../types/items";
 
+const BIZ_INFO = {
+  businessName: "Urban Bites Kitchen",
+  businessAddress: "123 Bliss Street, Hamra, Beirut",
+  businessPhone: "+961 01 555 999",
+};
+
 const MOCK_ORDERS: Order[] = [
   {
     id: "ord_1",
     businessId: "biz_1",
+    ...BIZ_INFO,
     customerName: "Table 4",
     tableId: "4",
     status: "PENDING",
+    paymentStatus: "UNPAID",
+    paymentMethod: "CASH",
     totalPrice: 4500,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -49,10 +58,13 @@ const MOCK_ORDERS: Order[] = [
   {
     id: "ord_2",
     businessId: "biz_1",
+    ...BIZ_INFO,
     customerName: "John Doe",
     customerPhone: "+1 (555) 019-2834",
-    customerAddress: " abou 3azra, Beirut, Lebanon",
+    customerAddress: "Abou 3azra, Beirut, Lebanon",
     status: "READY",
+    paymentStatus: "PAID",
+    paymentMethod: "ONLINE",
     totalPrice: 1200,
     createdAt: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
     updatedAt: new Date().toISOString(),
@@ -78,9 +90,12 @@ const MOCK_ORDERS: Order[] = [
   {
     id: "ord_3",
     businessId: "biz_1",
+    ...BIZ_INFO,
     customerName: "Table 2",
     tableId: "2",
     status: "PREPARING",
+    paymentStatus: "UNPAID",
+    paymentMethod: "CARD",
     totalPrice: 8500,
     createdAt: new Date(Date.now() - 1000 * 60 * 15).toISOString(),
     updatedAt: new Date().toISOString(),
@@ -106,9 +121,12 @@ const MOCK_ORDERS: Order[] = [
   {
     id: "ord_4",
     businessId: "biz_1",
+    ...BIZ_INFO,
     customerName: "Table 7",
     tableId: "7",
     status: "PENDING",
+    paymentStatus: "UNPAID",
+    paymentMethod: "CASH",
     totalPrice: 3200,
     createdAt: new Date(Date.now() - 1000 * 60 * 5).toISOString(),
     updatedAt: new Date().toISOString(),
@@ -150,10 +168,13 @@ const MOCK_ORDERS: Order[] = [
   {
     id: "ord_99",
     businessId: "biz_1",
+    ...BIZ_INFO,
     customerName: "Sarah Smith",
     customerPhone: "+1 (555) 999-8888",
     customerAddress: "123 Maple Street, Apt 4B, New York, NY",
     status: "CANCELLED",
+    paymentStatus: "REFUNDED",
+    paymentMethod: "CARD",
     totalPrice: 3200,
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 5).toISOString(),
     updatedAt: new Date().toISOString(),
@@ -185,11 +206,5 @@ export const OrderService = {
   },
   updateStatus: async (orderId: string, status: OrderStatus): Promise<void> => {
     await new Promise((resolve) => setTimeout(resolve, 300));
-
-    const index = MOCK_ORDERS.findIndex((o) => o.id === orderId);
-    if (index !== -1) {
-      MOCK_ORDERS[index].status = status;
-      MOCK_ORDERS[index].updatedAt = new Date().toISOString();
-    }
   },
 };

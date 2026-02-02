@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import OrderCard from "./components/OrderCard";
 import OrdersTable from "./components/OrdersTable";
 import OrderDetailsModal from "./components/OrderDetailsModal";
+import CreateOrderModal from "./components/CreateOrderModal";
 import { useOrderStore } from "@/app/store/useOrderStore";
 import { Order } from "@/app/types/order";
 
@@ -20,6 +21,7 @@ export default function OrdersPage() {
 
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   const { orders, isLoading, fetchOrders } = useOrderStore();
 
@@ -48,8 +50,8 @@ export default function OrdersPage() {
 
   const step2Orders = step1Orders.filter((o) => {
     if (orderType === "ALL") return true;
-    if (orderType === "DINE_IN") return !!o.tableId; // Has Table ID
-    if (orderType === "DELIVERY") return !o.tableId; // No Table ID (Delivery/Pickup)
+    if (orderType === "DINE_IN") return !!o.tableId;
+    if (orderType === "DELIVERY") return !o.tableId;
     return true;
   });
 
@@ -70,7 +72,10 @@ export default function OrdersPage() {
               Manage incoming orders and view history
             </p>
           </div>
-          <button className="px-4 py-2 bg-primary hover:bg-primary/90 text-white rounded-lg text-sm font-medium transition-colors shadow-[0_0_15px_-3px_var(--color-primary)] flex items-center gap-2">
+          <button
+            onClick={() => setIsCreateModalOpen(true)}
+            className="px-4 py-2 bg-primary hover:bg-primary/90 text-white rounded-lg text-sm font-medium transition-colors shadow-[0_0_15px_-3px_var(--color-primary)] flex items-center gap-2"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -90,7 +95,6 @@ export default function OrdersPage() {
         </div>
 
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-primary-dark/20 pb-1">
-          {/* Live / History Tabs */}
           <div className="flex items-center gap-6">
             {(["live", "history"] as const).map((tab) => (
               <button
@@ -177,6 +181,11 @@ export default function OrdersPage() {
           <OrdersTable orders={finalOrders} />
         )}
       </div>
+
+      <CreateOrderModal
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+      />
 
       <OrderDetailsModal
         order={selectedOrder}

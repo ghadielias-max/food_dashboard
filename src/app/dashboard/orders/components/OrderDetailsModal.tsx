@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { Order, OrderStatus } from "@/app/types/order";
+import { Order, OrderStatus, PaymentStatus } from "@/app/types/order";
 import { useOrderStore } from "@/app/store/useOrderStore";
 import ConfirmationModal from "@/app/components/ConfirmationModal";
+import PrintableReceipt from "./PrintableReceipt";
 
 interface Props {
   order: Order | null;
@@ -26,7 +27,7 @@ const statusLabels: Record<OrderStatus, string> = {
 };
 
 export default function OrderDetailsModal({ order, isOpen, onClose }: Props) {
-  const { updateOrderStatus } = useOrderStore();
+  const { updateOrderStatus, updatePaymentStatus } = useOrderStore();
   const [pendingStatus, setPendingStatus] = useState<OrderStatus | null>(null);
 
   if (!isOpen || !order) return null;
@@ -45,9 +46,21 @@ export default function OrderDetailsModal({ order, isOpen, onClose }: Props) {
     }
   };
 
+  const handlePrint = () => {
+    window.print();
+  };
+
+  const togglePayment = () => {
+    const newStatus: PaymentStatus =
+      order.paymentStatus === "PAID" ? "UNPAID" : "PAID";
+    updatePaymentStatus(order.id, newStatus);
+  };
+
   return (
     <>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+      <PrintableReceipt order={order} />
+
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm print:hidden">
         <div className="w-full max-w-lg bg-surface border border-primary-dark/30 rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
           <div className="p-6 border-b border-primary-dark/20 bg-surface-highlight flex justify-between items-start">
             <div>
@@ -59,15 +72,65 @@ export default function OrderDetailsModal({ order, isOpen, onClose }: Props) {
               </div>
               <p className="text-sm text-muted mt-1">{order.customerName}</p>
             </div>
-            <button
-              onClick={onClose}
-              className="text-muted hover:text-white transition-colors text-2xl leading-none"
-            >
-              &times;
-            </button>
+            <div className="flex gap-2">
+              <button
+                onClick={handlePrint}
+                className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-zinc-300 transition-colors"
+                title="Print Receipt"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-5 h-5"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0110.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0l.229 2.523a1.125 1.125 0 01-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0021 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 00-1.913-.247M6.34 18H5.25A2.25 2.25 0 013 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 011.913-.247m10.5 0a48.536 48.536 0 00-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5zm-3 0h.008v.008H15V10.5z"
+                  />
+                </svg>
+              </button>
+              <button
+                onClick={onClose}
+                className="text-muted hover:text-white transition-colors text-2xl leading-none px-2"
+              >
+                &times;
+              </button>
+            </div>
           </div>
 
           <div className="p-6 overflow-y-auto flex-1 custom-scrollbar space-y-6">
+            <div
+              className={`p-3 rounded-xl border flex justify-between items-center ${order.paymentStatus === "PAID" ? "bg-emerald-500/10 border-emerald-500/20" : "bg-red-500/10 border-red-500/20"}`}
+            >
+              <div className="flex items-center gap-3">
+                <div
+                  className={`w-8 h-8 rounded-full flex items-center justify-center ${order.paymentStatus === "PAID" ? "bg-emerald-500/20 text-emerald-500" : "bg-red-500/20 text-red-500"}`}
+                >
+                  $
+                </div>
+                <div>
+                  <p
+                    className={`text-xs font-bold ${order.paymentStatus === "PAID" ? "text-emerald-500" : "text-red-500"}`}
+                  >
+                    {order.paymentStatus} via {order.paymentMethod}
+                  </p>
+                  <p className="text-[10px] text-muted">
+                    Click button to toggle status
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={togglePayment}
+                className="text-xs underline text-muted hover:text-white"
+              >
+                Mark as {order.paymentStatus === "PAID" ? "Unpaid" : "Paid"}
+              </button>
+            </div>
+
             {(order.customerPhone ||
               order.customerAddress ||
               order.tableId) && (
