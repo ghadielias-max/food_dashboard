@@ -1,7 +1,6 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 
-// Forms
 import CategorySelector from "./forms/CategorySelector";
 import VariantsForm from "./forms/VariantsForm";
 import OptionsForm from "./forms/OptionsForm";
@@ -10,7 +9,6 @@ import ImageField from "./forms/ImageField";
 import IngredientsForm from "./forms/IngredientForm";
 import { ItemOption, ItemType, ItemVariant } from "@/app/types/items";
 
-// Define the submission data structure
 export interface ItemSubmissionData {
   name: string;
   price: string;
@@ -67,7 +65,6 @@ export default function CreateItemModal({
 
   const [errors, setErrors] = useState<Record<string, boolean>>({});
 
-  // Derived state (Fixes cascading render issue)
   const isValid = Boolean(
     form.name &&
     form.price &&
@@ -134,12 +131,12 @@ export default function CreateItemModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-      <div className="w-full max-w-2xl bg-[#0A0A12] border border-purple-900/30 rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
-        <div className="p-6 border-b border-purple-900/20 flex justify-between items-center bg-[#0F0F1A]">
+      <div className="w-full max-w-2xl bg-surface border border-primary-dark/30 rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
+        <div className="p-6 border-b border-primary-dark/20 flex justify-between items-center bg-surface-highlight">
           <h3 className="text-xl font-bold text-white">Create New Item</h3>
           <button
             onClick={onClose}
-            className="text-zinc-400 hover:text-white transition-colors"
+            className="text-muted hover:text-white transition-colors"
           >
             ✕
           </button>
@@ -157,8 +154,8 @@ export default function CreateItemModal({
                 onClick={() => setType("FOOD")}
                 className={`p-4 rounded-xl border transition-all flex flex-col items-center gap-1 ${
                   type === "FOOD"
-                    ? "bg-purple-600/20 border-purple-500 text-white shadow-[0_0_15px_-5px_rgba(147,51,234,0.3)]"
-                    : "bg-[#05050A] border-purple-900/20 text-zinc-500 hover:border-purple-500/50"
+                    ? "bg-primary/20 border-primary text-white shadow-[0_0_15px_-5px_var(--color-primary)]"
+                    : "bg-background border-primary-dark/20 text-muted hover:border-primary/50"
                 }`}
               >
                 <span className="font-semibold text-sm">Food Item</span>
@@ -171,8 +168,8 @@ export default function CreateItemModal({
                 onClick={() => setType("PRODUCT")}
                 className={`p-4 rounded-xl border transition-all flex flex-col items-center gap-1 ${
                   type === "PRODUCT"
-                    ? "bg-purple-600/20 border-purple-500 text-white shadow-[0_0_15px_-5px_rgba(147,51,234,0.3)]"
-                    : "bg-[#05050A] border-purple-900/20 text-zinc-500 hover:border-purple-500/50"
+                    ? "bg-primary/20 border-primary text-white shadow-[0_0_15px_-5px_var(--color-primary)]"
+                    : "bg-background border-primary-dark/20 text-muted hover:border-primary/50"
                 }`}
               >
                 <span className="font-semibold text-sm">Product</span>
@@ -187,17 +184,17 @@ export default function CreateItemModal({
                 <div className="space-y-2">
                   <label
                     className={`text-xs font-medium ${
-                      errors.name ? "text-red-400" : "text-zinc-400"
+                      errors.name ? "text-error" : "text-muted"
                     }`}
                   >
                     Name {errors.name && "*"}
                   </label>
                   <input
                     type="text"
-                    className={`w-full bg-[#05050A] border rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none transition-colors ${
+                    className={`w-full bg-background border rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none transition-colors ${
                       errors.name
-                        ? "border-red-500/50 focus:border-red-500"
-                        : "border-purple-900/20 focus:border-purple-500"
+                        ? "border-error/50 focus:border-error"
+                        : "border-primary-dark/20 focus:border-primary"
                     }`}
                     value={form.name}
                     onChange={(e) => updateForm("name", e.target.value)}
@@ -206,7 +203,7 @@ export default function CreateItemModal({
                 <div className="space-y-2">
                   <label
                     className={`text-xs font-medium ${
-                      errors.price ? "text-red-400" : "text-zinc-400"
+                      errors.price ? "text-error" : "text-muted"
                     }`}
                   >
                     Base Price ($) {errors.price && "*"}
@@ -214,10 +211,10 @@ export default function CreateItemModal({
                   <input
                     type="number"
                     step="0.01"
-                    className={`w-full bg-[#05050A] border rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none transition-colors ${
+                    className={`w-full bg-background border rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none transition-colors ${
                       errors.price
-                        ? "border-red-500/50 focus:border-red-500"
-                        : "border-purple-900/20 focus:border-purple-500"
+                        ? "border-error/50 focus:border-error"
+                        : "border-primary-dark/20 focus:border-primary"
                     }`}
                     value={form.price}
                     onChange={(e) => updateForm("price", e.target.value)}
@@ -238,11 +235,11 @@ export default function CreateItemModal({
               />
 
               <div className="space-y-2">
-                <label className="text-xs font-medium text-zinc-400">
+                <label className="text-xs font-medium text-muted">
                   Description
                 </label>
                 <textarea
-                  className="w-full bg-[#05050A] border border-purple-900/20 rounded-lg px-4 py-2.5 text-sm text-white focus:border-purple-500 min-h-[80px] resize-none focus:outline-none"
+                  className="w-full bg-background border border-primary-dark/20 rounded-lg px-4 py-2.5 text-sm text-white focus:border-primary min-h-[80px] resize-none focus:outline-none"
                   value={form.description}
                   onChange={(e) => updateForm("description", e.target.value)}
                 />
@@ -271,29 +268,29 @@ export default function CreateItemModal({
                 <VariantsForm variants={variants} setVariants={setVariants} />
 
                 {variants.length === 0 && (
-                  <div className="pt-4 border-t border-purple-900/20">
+                  <div className="pt-4 border-t border-primary-dark/20">
                     <h4 className="text-sm font-semibold text-white mb-4">
                       Global Inventory
                     </h4>
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <label className="text-xs font-medium text-zinc-400">
+                        <label className="text-xs font-medium text-muted">
                           Stock
                         </label>
                         <input
                           type="number"
-                          className="w-full bg-[#05050A] border border-purple-900/20 rounded-lg px-4 py-2.5 text-sm text-white focus:border-purple-500"
+                          className="w-full bg-background border border-primary-dark/20 rounded-lg px-4 py-2.5 text-sm text-white focus:border-primary"
                           value={form.stock}
                           onChange={(e) => updateForm("stock", e.target.value)}
                         />
                       </div>
                       <div className="space-y-2">
-                        <label className="text-xs font-medium text-zinc-400">
+                        <label className="text-xs font-medium text-muted">
                           SKU
                         </label>
                         <input
                           type="text"
-                          className="w-full bg-[#05050A] border border-purple-900/20 rounded-lg px-4 py-2.5 text-sm text-white focus:border-purple-500"
+                          className="w-full bg-background border border-primary-dark/20 rounded-lg px-4 py-2.5 text-sm text-white focus:border-primary"
                           value={form.sku}
                           onChange={(e) => updateForm("sku", e.target.value)}
                         />
@@ -306,10 +303,10 @@ export default function CreateItemModal({
           </form>
         </div>
 
-        <div className="p-6 border-t border-purple-900/20 bg-[#0F0F1A] flex justify-end gap-3">
+        <div className="p-6 border-t border-primary-dark/20 bg-surface-highlight flex justify-end gap-3">
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded-xl text-sm font-medium text-zinc-400 hover:bg-white/5 transition-colors"
+            className="px-4 py-2 rounded-xl text-sm font-medium text-muted hover:bg-white/5 transition-colors"
           >
             Cancel
           </button>
@@ -320,8 +317,8 @@ export default function CreateItemModal({
             className={`px-6 py-2 rounded-xl text-sm font-medium transition-all duration-200 
               ${
                 isValid
-                  ? "bg-purple-600 hover:bg-purple-500 text-white shadow-[0_0_15px_-3px_rgba(147,51,234,0.5)] cursor-pointer"
-                  : "bg-zinc-800 text-zinc-500 cursor-not-allowed border border-zinc-700"
+                  ? "bg-primary hover:bg-primary/90 text-white shadow-[0_0_15px_-3px_var(--color-primary)] cursor-pointer"
+                  : "bg-surface-highlight border border-white/5 text-muted cursor-not-allowed"
               }`}
           >
             Create Item

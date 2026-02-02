@@ -20,7 +20,7 @@ export default function CategorySelector({ value, onChange, error }: Props) {
     <div className="space-y-2">
       <div className="flex justify-between items-center">
         <label
-          className={`text-xs font-medium ${error ? "text-red-400" : "text-zinc-400"}`}
+          className={`text-xs font-medium ${error ? "text-error" : "text-muted"}`}
         >
           Category {error && "*"}
         </label>
@@ -30,7 +30,7 @@ export default function CategorySelector({ value, onChange, error }: Props) {
             setIsCustom(!isCustom);
             onChange("");
           }}
-          className="text-[10px] text-purple-400 hover:text-purple-300 underline"
+          className="text-[10px] text-primary hover:text-primary/80 underline transition-colors"
         >
           {isCustom ? "Select existing category" : "+ Add custom category"}
         </button>
@@ -39,10 +39,10 @@ export default function CategorySelector({ value, onChange, error }: Props) {
       {isCustom ? (
         <input
           type="text"
-          className={`w-full bg-[#05050A] border rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none transition-colors ${
+          className={`w-full bg-background border rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none transition-colors ${
             error
-              ? "border-red-500/50 focus:border-red-500"
-              : "border-purple-900/20 focus:border-purple-500"
+              ? "border-error/50 focus:border-error placeholder:text-error/30"
+              : "border-primary-dark/20 focus:border-primary"
           }`}
           placeholder="Type new category name..."
           value={value}
@@ -50,10 +50,10 @@ export default function CategorySelector({ value, onChange, error }: Props) {
         />
       ) : (
         <select
-          className={`w-full bg-[#05050A] border rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none transition-colors appearance-none ${
+          className={`w-full bg-background border rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none transition-colors appearance-none ${
             error
-              ? "border-red-500/50 focus:border-red-500 text-red-400"
-              : "border-purple-900/20 focus:border-purple-500"
+              ? "border-error/50 focus:border-error text-error"
+              : "border-primary-dark/20 focus:border-primary"
           }`}
           value={value}
           onChange={(e) => onChange(e.target.value)}

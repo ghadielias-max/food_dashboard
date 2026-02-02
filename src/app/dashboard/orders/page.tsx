@@ -34,18 +34,18 @@ export default function OrdersPage() {
   });
 
   return (
-    <div className="space-y-8 bg-[#05050A] min-h-screen">
+    <div className="space-y-8 bg-background min-h-screen">
       <div className="flex flex-col gap-6">
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-3xl font-bold tracking-tight text-white">
               Orders
             </h2>
-            <p className="text-zinc-400 mt-1">
+            <p className="text-muted mt-1">
               Manage incoming orders and view history
             </p>
           </div>
-          <button className="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white rounded-lg text-sm font-medium transition-colors shadow-[0_0_15px_-3px_rgba(147,51,234,0.5)] flex items-center gap-2">
+          <button className="px-4 py-2 bg-primary hover:bg-primary/90 text-white rounded-lg text-sm font-medium transition-colors shadow-[0_0_15px_-3px_var(--color-primary)] flex items-center gap-2">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -64,7 +64,7 @@ export default function OrdersPage() {
           </button>
         </div>
 
-        <div className="flex items-center justify-between border-b border-purple-900/20">
+        <div className="flex items-center justify-between border-b border-primary-dark/20">
           <div className="flex items-center gap-6">
             {(["live", "history"] as const).map((tab) => (
               <button
@@ -73,12 +73,12 @@ export default function OrdersPage() {
                 className={`pb-3 text-sm font-medium transition-all duration-200 relative capitalize ${
                   activeTab === tab
                     ? "text-white"
-                    : "text-zinc-500 hover:text-zinc-300"
+                    : "text-muted hover:text-zinc-300"
                 }`}
               >
                 {tab === "live" ? "Live Orders" : "Order History"}
                 {activeTab === tab && (
-                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-purple-500 shadow-[0_-2px_10px_rgba(168,85,247,0.5)]" />
+                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary shadow-[0_-2px_10px_rgba(147,51,234,0.5)]" />
                 )}
               </button>
             ))}
@@ -93,8 +93,8 @@ export default function OrdersPage() {
                 onClick={() => setActiveSubTab(tab)}
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all border ${
                   activeSubTab === tab
-                    ? "bg-purple-600/20 text-purple-300 border-purple-500/50"
-                    : "bg-[#0A0A12] text-zinc-500 border-transparent hover:border-purple-500/20 hover:text-zinc-300"
+                    ? "bg-primary/20 text-primary border-primary/50"
+                    : "bg-surface text-muted border-transparent hover:border-primary/20 hover:text-zinc-300"
                 }`}
               >
                 {tab === "ALL"
@@ -108,8 +108,8 @@ export default function OrdersPage() {
 
       <div className="min-h-[500px]">
         {isLoading && orders.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-20 text-zinc-500">
-            <div className="w-8 h-8 border-2 border-purple-600 border-t-transparent rounded-full animate-spin mb-4" />
+          <div className="flex flex-col items-center justify-center py-20 text-muted">
+            <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mb-4" />
             <p>Loading orders...</p>
           </div>
         ) : activeTab === "live" ? (
@@ -118,7 +118,7 @@ export default function OrdersPage() {
               <OrderCard key={order.id} order={order} />
             ))}
             {filteredLiveOrders.length === 0 && (
-              <div className="col-span-full flex flex-col items-center justify-center py-20 text-zinc-500 border border-dashed border-purple-900/20 rounded-2xl">
+              <div className="col-span-full flex flex-col items-center justify-center py-20 text-muted border border-dashed border-primary-dark/20 rounded-2xl">
                 <p>No orders found in this category.</p>
               </div>
             )}

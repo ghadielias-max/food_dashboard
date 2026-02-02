@@ -9,7 +9,7 @@ export default function ImageField({ value, onChange, error }: Props) {
     <div className="space-y-3">
       <div className="flex justify-between">
         <label
-          className={`text-xs font-medium ${error ? "text-red-400" : "text-zinc-400"}`}
+          className={`text-xs font-medium ${error ? "text-error" : "text-muted"}`}
         >
           Item Image {error && "*"}
         </label>
@@ -17,7 +17,9 @@ export default function ImageField({ value, onChange, error }: Props) {
 
       <div className="flex gap-4 items-start">
         <div
-          className={`w-24 h-24 rounded-xl bg-[#05050A] flex-shrink-0 flex items-center justify-center overflow-hidden relative border ${error ? "border-red-500/50" : "border-purple-900/20"}`}
+          className={`w-24 h-24 rounded-xl bg-background flex-shrink-0 flex items-center justify-center overflow-hidden relative border ${
+            error ? "border-error/50" : "border-primary-dark/20"
+          }`}
         >
           {value ? (
             <img
@@ -28,7 +30,9 @@ export default function ImageField({ value, onChange, error }: Props) {
             />
           ) : (
             <div
-              className={`flex flex-col items-center gap-1 ${error ? "text-red-500/50" : "text-zinc-600"}`}
+              className={`flex flex-col items-center gap-1 ${
+                error ? "text-error/50" : "text-zinc-600"
+              }`}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -52,17 +56,17 @@ export default function ImageField({ value, onChange, error }: Props) {
         <div className="flex-1 space-y-2">
           <input
             type="text"
-            className={`w-full bg-[#05050A] border rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none transition-colors ${
+            className={`w-full bg-background border rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none transition-colors ${
               error
-                ? "border-red-500/50 focus:border-red-500 placeholder:text-red-500/30"
-                : "border-purple-900/20 focus:border-purple-500"
+                ? "border-error/50 focus:border-error placeholder:text-error/30"
+                : "border-primary-dark/20 focus:border-primary"
             }`}
             placeholder="https://example.com/image.png"
             value={value}
             onChange={(e) => onChange(e.target.value)}
           />
           {error && (
-            <p className="text-[10px] text-red-400">Image URL is required.</p>
+            <p className="text-[10px] text-error">Image URL is required.</p>
           )}
         </div>
       </div>

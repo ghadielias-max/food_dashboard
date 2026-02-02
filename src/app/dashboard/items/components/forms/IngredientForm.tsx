@@ -32,16 +32,16 @@ export default function IngredientsForm({
 
   return (
     <div
-      className={`pt-4 border-t ${error ? "border-red-500/50" : "border-purple-900/20"}`}
+      className={`pt-4 border-t ${error ? "border-error/50" : "border-primary-dark/20"}`}
     >
       <div className="flex justify-between items-center mb-2">
         <h4
-          className={`text-sm font-semibold ${error ? "text-red-400" : "text-white"}`}
+          className={`text-sm font-semibold ${error ? "text-error" : "text-white"}`}
         >
-          Ingredients <span className="text-red-500">*</span>
+          Ingredients <span className="text-error">*</span>
         </h4>
         {error && (
-          <span className="text-[10px] text-red-400">
+          <span className="text-[10px] text-error">
             At least one ingredient is required.
           </span>
         )}
@@ -51,7 +51,9 @@ export default function IngredientsForm({
         <input
           type="text"
           placeholder="e.g. Flour, Sugar, Milk"
-          className={`flex-1 bg-[#05050A] border rounded-lg px-3 py-2 text-sm text-white focus:border-purple-500 ${error ? "border-red-500/50" : "border-purple-900/20"}`}
+          className={`flex-1 bg-background border rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-primary transition-colors ${
+            error ? "border-error/50" : "border-primary-dark/20"
+          }`}
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
@@ -59,7 +61,7 @@ export default function IngredientsForm({
         <button
           type="button"
           onClick={add}
-          className="px-4 py-2 bg-purple-600/20 text-purple-400 rounded-lg text-sm border border-purple-500/30 hover:bg-purple-600 hover:text-white transition-colors"
+          className="px-4 py-2 bg-primary/20 text-primary rounded-lg text-sm border border-primary/30 hover:bg-primary hover:text-white transition-colors"
         >
           Add
         </button>
@@ -69,13 +71,13 @@ export default function IngredientsForm({
         {ingredients.map((ing, i) => (
           <span
             key={i}
-            className="px-3 py-1 bg-zinc-800/50 border border-zinc-700/50 rounded-lg text-xs text-zinc-300 flex items-center gap-2"
+            className="px-3 py-1 bg-surface-highlight border border-white/10 rounded-lg text-xs text-zinc-300 flex items-center gap-2"
           >
             {ing}
             <button
               type="button"
               onClick={() => remove(i)}
-              className="hover:text-red-400 ml-1 text-zinc-500"
+              className="hover:text-error ml-1 text-muted transition-colors"
             >
               ×
             </button>

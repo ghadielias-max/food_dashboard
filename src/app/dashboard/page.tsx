@@ -1,17 +1,16 @@
 export default function DashboardPage() {
   return (
-    <div className="space-y-8 p-8 bg-[#05050A] min-h-screen">
-      {/* Header */}
+    <div className="space-y-8 p-8 bg-background min-h-screen">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-3xl font-bold tracking-tight text-white">
             Overview
           </h2>
-          <p className="text-zinc-400 mt-1">
+          <p className="text-muted mt-1">
             Welcome back to your store command center.
           </p>
         </div>
-        <button className="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white rounded-lg text-sm font-medium transition-colors shadow-[0_0_15px_-3px_rgba(147,51,234,0.5)]">
+        <button className="px-4 py-2 bg-primary hover:bg-primary/90 text-white rounded-lg text-sm font-medium transition-colors shadow-[0_0_15px_-3px_var(--color-primary)]">
           Download Report
         </button>
       </div>
@@ -25,17 +24,17 @@ export default function DashboardPage() {
         ].map((stat, i) => (
           <div
             key={i}
-            className="p-6 rounded-2xl bg-[#0A0A12] border border-purple-900/20 shadow-lg relative overflow-hidden group"
+            className="p-6 rounded-2xl bg-surface border border-primary-dark/20 shadow-lg relative overflow-hidden group"
           >
-            <div className="absolute top-0 right-0 w-24 h-24 bg-purple-600/10 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110" />
-            <p className="text-sm font-medium text-zinc-400 relative z-10">
+            <div className="absolute top-0 right-0 w-24 h-24 bg-primary/10 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110" />
+            <p className="text-sm font-medium text-muted relative z-10">
               {stat.label}
             </p>
             <div className="mt-2 flex items-baseline gap-2 relative z-10">
               <span className="text-3xl font-bold text-white">
                 {stat.value}
               </span>
-              <span className="text-xs font-medium text-emerald-400">
+              <span className="text-xs font-medium text-success">
                 {stat.trend}
               </span>
             </div>
@@ -44,18 +43,18 @@ export default function DashboardPage() {
       </div>
 
       {/* Main Content Placeholder */}
-      <div className="rounded-2xl border border-dashed border-purple-900/30 bg-[#0A0A12]/50 h-96 flex flex-col items-center justify-center text-center p-8 relative overflow-hidden">
+      <div className="rounded-2xl border border-dashed border-primary-dark/30 bg-surface/50 h-96 flex flex-col items-center justify-center text-center p-8 relative overflow-hidden">
         {/* Decorative background blob */}
-        <div className="absolute w-64 h-64 bg-purple-600/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute w-64 h-64 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
 
-        <div className="w-16 h-16 rounded-full bg-purple-900/20 flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(147,51,234,0.1)]">
+        <div className="w-16 h-16 rounded-full bg-primary-dark/20 flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(147,51,234,0.1)]">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="w-8 h-8 text-purple-400"
+            className="w-8 h-8 text-primary"
           >
             <path
               strokeLinecap="round"
@@ -68,7 +67,7 @@ export default function DashboardPage() {
         <h3 className="text-xl font-semibold text-white mb-2">
           Analytics Module
         </h3>
-        <p className="text-zinc-500 max-w-sm">
+        <p className="text-muted max-w-sm">
           Business stats, revenue, and orders summary charts are currently being
           developed. Check back soon.
         </p>
