@@ -42,9 +42,7 @@ export default function DashboardPage() {
         ))}
       </div>
 
-      {/* Main Content Placeholder */}
       <div className="rounded-2xl border border-dashed border-primary-dark/30 bg-surface/50 h-96 flex flex-col items-center justify-center text-center p-8 relative overflow-hidden">
-        {/* Decorative background blob */}
         <div className="absolute w-64 h-64 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
 
         <div className="w-16 h-16 rounded-full bg-primary-dark/20 flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(147,51,234,0.1)]">

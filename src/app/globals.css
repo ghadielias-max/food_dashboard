@@ -4,12 +4,9 @@
   --color-background: var(--background);
   --color-surface: var(--surface);
   --color-surface-highlight: var(--surface-highlight);
-
   --color-primary: var(--primary);
   --color-primary-dark: var(--primary-dark);
-
   --color-muted: var(--text-muted);
-
   --color-success: var(--success);
   --color-error: var(--error);
   --color-warning: var(--warning);
@@ -17,17 +14,62 @@
 }
 
 :root {
+  /* Default: Royal Purple (Dark) */
   --background: #05050a;
   --surface: #0a0a12;
   --surface-highlight: #0f0f1a;
-
   --primary: #9333ea;
   --primary-dark: #581c87;
-
   --text-muted: #a1a1aa;
-
   --success: #10b981;
   --error: #ef4444;
   --warning: #eab308;
   --info: #3b82f6;
+}
+
+[data-theme="midnight"] {
+  /* Ocean Blue (Dark) */
+  --background: #020617;
+  --surface: #0f172a;
+  --surface-highlight: #1e293b;
+  --primary: #3b82f6;
+  --primary-dark: #1e40af;
+}
+
+[data-theme="forest"] {
+  /* Emerald Green (Dark) */
+  --background: #020402;
+  --surface: #051910;
+  --surface-highlight: #064e3b;
+  --primary: #10b981;
+  --primary-dark: #065f46;
+}
+
+[data-theme="sunset"] {
+  /* Burnt Orange (Dark) */
+  --background: #0c0402;
+  --surface: #1a0805;
+  --surface-highlight: #2f100b;
+  --primary: #f97316;
+  --primary-dark: #9a3412;
+}
+
+[data-theme="light"] {
+  /* Clean White (Light) */
+  --background: #ffffff;
+  --surface: #f4f4f5;
+  --surface-highlight: #e4e4e7;
+  --primary: #7c3aed;
+  --primary-dark: #5b21b6;
+  --text-muted: #71717a;
+  /* Override text colors for light mode visibility */
+  color: #09090b;
+}
+/* Fix white text in light mode */
+[data-theme="light"] .text-white {
+  color: #18181b !important;
+}
+[data-theme="light"] .text-zinc-200,
+[data-theme="light"] .text-zinc-300 {
+  color: #3f3f46 !important;
 }

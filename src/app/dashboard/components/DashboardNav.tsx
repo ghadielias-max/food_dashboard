@@ -33,7 +33,7 @@ export default function DashboardNav() {
               className={`flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 border ${
                 isActive
                   ? "bg-primary text-white border-primary shadow-[0_4px_20px_-5px_var(--color-primary)]"
-                  : "text-muted border-transparent hover:bg-primary/10 hover:text-white hover:border-primary/20"
+                  : "text-muted border-transparent hover:bg-primary/10 hover:text-primary hover:border-primary/20"
               }`}
             >
               {tab.label}
@@ -43,7 +43,7 @@ export default function DashboardNav() {
       </nav>
 
       <div className="p-4 border-t border-primary-dark/20 bg-gradient-to-b from-background to-surface">
-        <div className="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-white/5 cursor-pointer transition-colors group">
+        <div className="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-surface-highlight cursor-pointer transition-colors group">
           <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-primary to-info border-2 border-background shadow-lg flex items-center justify-center text-xs text-white font-bold flex-shrink-0">
             SA
           </div>
